@@ -21,13 +21,18 @@ void die(const string& msg) {
 #endif
 }
 
-void load_file(const string& filename, string& str) {
+void load_file(const string& filename, string& str)
+{
 	// To make this program less fussy about where exactly it's run
 	// from relative to the file, try looking in parent directories too.
 	std::string directory = "";
-	for (int i = 0; i < 6; i++) {
+
+	for (int i = 0; i < 6; i++)
+	{
 		ifstream f(directory + filename, std::ios_base::binary);
-		if (!f.good()) {
+
+		if (!f.good()) 
+		{
 			directory = "../" + directory;
 			continue;
 		}
@@ -48,7 +53,8 @@ void load_file(const string& filename, string& str) {
 	die("Unable to find " + filename);
 }
 
-void load_jute_book(string& str) {
+void load_jute_book(string& str)
+{
 	// Read the whole file into str.
 	load_file("jute-book.txt", str);
 
@@ -57,31 +63,50 @@ void load_jute_book(string& str) {
 	str = str.substr(0x4d7, 0x2550c - 0x4d7);
 }
 
-void show_context(const string& str, Position pos) {
+void show_context(const string& str, Position pos)
+{
+	// The width of text you wish to show, 38 chars to the left of pos, 38 chars to the right of pos.
 	const int width = 76;
 	Position left = pos - (width / 2);
 	Position right = pos + (width / 2);
 	Position len = str.size();
-	for (Position i = left; i < right; ++i) {
-		if (i < 0 || i >= len) {
+
+	for (Position i = left; i < right; ++i)
+	{
+		if (i < 0 || i >= len)
+		{
 			cout << ' ';
 			continue;
 		}
+
 		char c = str[i];
-		if (c >= 32 && c < 128) {
+
+		// Check if the value at pos 'i' is a value in the ASCII TABLE, range 32 - 127
+		if (c >= 32 && c < 128)
+		{
 			cout << c;
-		} else {
+		} 
+		else
+		{
 			// Show control characters as @s.
 			cout << '@';
 		}
 	}
+
 	cout << '\n';
-	for (Position i = left; i < right; ++i) {
-		if (i < pos) {
+
+	for (Position i = left; i < right; ++i)
+	{
+		// Print out spaces until we get to our position we passed in.
+		if (i < pos)
+		{
 			cout << ' ';
-		} else if (i == pos) {
+		}
+		else if (i == pos)	// Then print out a nice caret to indicate position.
+		{
 			cout << "^ " << pos;
 		}
 	}
+
 	cout << '\n';
 }
